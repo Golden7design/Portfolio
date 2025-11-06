@@ -10,39 +10,55 @@ document.addEventListener("DOMContentLoaded", () => {
     lerp: 0.1, // plus bas = plus fluide
   });
 
-  // --- Header shift helper: detect .card-nav-content and toggle body.nav-open ---
-  // This helps browsers that don't support :has() and ensures the header shifts exactly
-  // by the height of the card when it appears.
-  function _setupHeaderShiftObserver() {
-    const updateHeaderShift = () => {
-      const card = document.querySelector('.card-nav-content');
-      if (card) {
-        const rect = card.getBoundingClientRect();
-        const h = Math.round(rect.height);
-        document.documentElement.style.setProperty('--header-shift', `${h}px`);
-        document.body.classList.add('nav-open');
-      } else {
-        document.documentElement.style.removeProperty('--header-shift');
-        document.body.classList.remove('nav-open');
-      }
-    };
+  function raf(time) {
+    lenis.raf(time);
+    ScrollTrigger.update();
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
 
-    // Watch for additions/removals in the body
-    const mo = new MutationObserver(() => {
-      updateHeaderShift();
-    });
-    mo.observe(document.body, { childList: true, subtree: true });
+  const canvas = document.querySelector("canvas");
+  const context = canvas.getContext("2d");
 
-    // Also update on load and on resize
-    window.addEventListener('load', updateHeaderShift);
-    window.addEventListener('resize', updateHeaderShift);
+  const frameCount = 200;
+  const currentFrame = (i) => `./public/frames/frame_${(i + 1).toString().padStart(6, "0")}.jpg`;
+  const images = [];
+  const videoFrames = { frame: 0 };
 
-    // If a card appears, watch its size changes to update the shift dynamically
-    const resizeObserver = new ResizeObserver(() => updateHeaderShift());
-    const watchForCard = () => {
-      const card = document.querySelector('.card-nav-content');
-      if (card) resizeObserver.observe(card);
-      else resizeObserver.disconnect();
-    };
+  const setCanvasSize = () => {
+    const ratio = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * ratio;
+    canvas.height = window.innerHeight * ratio;
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+    context.scale(ratio, ratio);
+  };
+  setCanvasSize();
 
-    // Keep an interval to attach Resiz
+  for (let i = 0; i < frameCount; i++) {
+    const img = new Image();
+    img.src = currentFrame(i);
+    images.push(img);
+  }
+
+  let currentFrameIndex = -1;
+  const render = () => {
+    const img = images[videoFrames.frame];
+    if (!img || !img.complete || videoFrames.frame === currentFrameIndex) return;
+    currentFrameIndex = videoFrames.frame;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(img, 0, 0, canvas.width, canvas.height);
+  };
+
+  ScrollTrigger.create({
+    trigger: ".hero",
+    start: "top top",
+    end: "+=4000",
+    scrub: 0.5,
+    pin: true,
+    onUpdate: (self) => {
+      videoFrames.frame = Math.floor(self.progress * (frameCount - 1));
+      render();
+    },
+  });
+});

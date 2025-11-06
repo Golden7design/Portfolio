@@ -12,8 +12,6 @@ function raf(time) {
 requestAnimationFrame(raf);
 
 // --- Données des cartes ---
-
-
 const items = [
   {
     label: "About",
@@ -50,6 +48,7 @@ const nav = document.querySelector(".card-nav");
 const content = document.querySelector(".card-nav-content");
 const hamburger = document.querySelector(".hamburger-menu");
 const ctaButton = document.querySelector(".card-nav-cta-button");
+const header = document.querySelector(".header"); // ✅ sélection du header
 
 let isExpanded = false;
 let tl;
@@ -100,18 +99,36 @@ function calculateHeight() {
 function createTimeline() {
   gsap.set(nav, { height: 60, overflow: "hidden" });
   gsap.set(".nav-card", { y: 50, opacity: 0 });
+  gsap.set(header, { y: 0 }); // ✅ position de base du header
 
   const tl = gsap.timeline({ paused: true, ease: "power3.out" });
+
   tl.to(nav, {
     height: calculateHeight,
     duration: 0.4
   });
-  tl.to(".nav-card", {
-    y: 0,
-    opacity: 1,
-    duration: 0.4,
-    stagger: 0.08
-  }, "-=0.1");
+
+  tl.to(
+    ".nav-card",
+    {
+      y: 0,
+      opacity: 1,
+      duration: 0.4,
+      stagger: 0.08
+    },
+    "-=0.1"
+  );
+
+  // ✅ Animation du header vers le bas selon la hauteur du menu
+  tl.to(
+    header,
+    {
+      y: () => calculateHeight() - 60, // descend en fonction du menu
+      duration: 0.4,
+      ease: "power2.out"
+    },
+    "<"
+  );
 
   return tl;
 }
@@ -130,6 +147,7 @@ function toggleMenu() {
     tl.eventCallback("onReverseComplete", () => {
       isExpanded = false;
       nav.classList.remove("open");
+      gsap.set(header, { y: 0 }); // ✅ remet le header à sa position initiale
     });
   }
 }
@@ -144,5 +162,6 @@ window.addEventListener("resize", () => {
   if (!tl) return;
   if (isExpanded) {
     gsap.set(nav, { height: calculateHeight() });
+    gsap.set(header, { y: calculateHeight() - 60 });
   }
 });
