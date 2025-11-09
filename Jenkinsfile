@@ -1,8 +1,12 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'node18'
+    }
+
     environment {
-        NETLIFY_AUTH_TOKEN = credentials('NETLIFY_TOKEN') // Token stocké dans Jenkins
+        NETLIFY_AUTH_TOKEN = credentials('NETLIFY_TOKEN')
         NETLIFY_SITE_ID = 'c7cee1b2-95a3-4691-a09c-769785e98146'
     }
 
@@ -31,23 +35,17 @@ pipeline {
         stage('Deploy to Netlify') {
             steps {
                 echo 'Deploying to Netlify...'
-
-                // Option 1 : utiliser npx (pas besoin d'installation globale)
-                sh 'npx netlify-cli deploy --prod --dir=build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
-                
-                // Option 2 : installation globale si tu préfères
-                // sh 'npm install -g netlify-cli'
-                // sh 'netlify deploy --prod --dir=build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
+                sh 'npx netlify-cli deploy --prod --dir=$WORKSPACE/build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline finished successfully!'
+            echo '✅ Pipeline finished successfully!'
         }
         failure {
-            echo 'Pipeline failed.Check logs above.'
+            echo '❌ Pipeline failed. Check logs above.'
         }
     }
 }
