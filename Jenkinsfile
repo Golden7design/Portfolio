@@ -21,13 +21,6 @@ pipeline {
             }
         }
 
-        stage('Build project') {
-            steps {
-                echo 'Building React project...'
-                bat 'npm run build'
-            }
-        }
-
         stage('Deploy to Netlify') {
             steps {
                 echo 'Deploying to Netlify...'
