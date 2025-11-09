@@ -29,6 +29,7 @@ h1{
     font-size: 3rem;
     font-weight: extra-bold;
     line-height: 1.1;
+    color: red;
 
 }
 .hero {
@@ -54,7 +55,7 @@ nav > div{
 
 }
 
-.skill_container{
+.skills_container{
     display: flex   ;
     justify-content: center;
     align-items: center;
