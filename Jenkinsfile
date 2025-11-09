@@ -17,21 +17,21 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 echo 'Installing dependencies npm...'
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('Build project') {
             steps {
                 echo 'Building React project...'
-                sh 'npm run build'
+                bat 'npm run build'
             }
         }
 
         stage('Deploy to Netlify') {
             steps {
                 echo 'Deploying to Netlify...'
-                sh 'npx netlify-cli deploy --prod --dir=$WORKSPACE/build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
+                bat 'npx netlify-cli deploy --prod --dir=$WORKSPACE/build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
             }
         }
     }
