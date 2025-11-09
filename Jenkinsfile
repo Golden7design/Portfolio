@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'node18'
-    }
-
     environment {
         NETLIFY_AUTH_TOKEN = credentials('NETLIFY_TOKEN')
         NETLIFY_SITE_ID = 'c7cee1b2-95a3-4691-a09c-769785e98146'
