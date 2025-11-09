@@ -9,7 +9,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Git via SSH avec credentials créées
                 git branch: 'main',
                     url: 'https://github.com/Golden7design/Portfolio.git'
             }
@@ -48,7 +47,7 @@ pipeline {
             echo 'Pipeline finished successfully!'
         }
         failure {
-            echo 'Pipeline failed. Check logs above.'
+            echo 'Pipeline failed.Check logs above.'
         }
     }
 }
