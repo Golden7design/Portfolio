@@ -27,7 +27,7 @@ img{
 h1{
     font-family: 'host Grotesk', sans-serif ;
     font-size: 3rem;
-    font-weight: 400;
+    font-weight: extra-bold;
     line-height: 1.1;
 
 }
@@ -54,7 +54,7 @@ nav > div{
 
 }
 
-.outro{
+.skill_container{
     display: flex   ;
     justify-content: center;
     align-items: center;
