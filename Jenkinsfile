@@ -23,10 +23,10 @@ pipeline {
 
         stage('Deploy to Netlify') {
             steps {
-                echo 'Deploying to Netlify...'
-                bat 'npx netlify-cli deploy --prod --dir=$WORKSPACE/build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
+                bat 'npm install -g netlify-cli'
+                bat 'netlify deploy --prod --dir=%WORKSPACE% --auth=%NETLIFY_AUTH_TOKEN% --site=%NETLIFY_SITE_ID%'
             }
-        }
+}
     }
 
     post {
