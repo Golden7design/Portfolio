@@ -16,7 +16,7 @@ pipeline {
 
         stage('Install dependencies') {
             steps {
-                echo 'Installing npm dependencies...'
+                echo 'Installing dependencies npm...'
                 sh 'npm install'
             }
         }
