@@ -14,13 +14,6 @@ pipeline {
             }
         }
 
-        stage('Install dependencies') {
-            steps {
-                echo 'Installing npm dependencies...'
-                bat 'npm install'
-            }
-        }
-
         stage('Deploy to Netlify') {
             steps {
                 echo 'Deploying to Netlify...'
