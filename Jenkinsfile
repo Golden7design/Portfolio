@@ -34,7 +34,7 @@ pipeline {
             echo '✅ Pipeline finished successfully !!'
         }
         failure {
-            echo '❌ Pipeline failed. Check logs above.'
+            echo '❌ Pipeline failed.Check logs above.'
         }
     }
 }
